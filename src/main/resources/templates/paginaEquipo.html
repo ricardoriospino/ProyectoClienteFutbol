@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet"
+	href="../static/css/bootstrap.css">
+	<script th:src="@{/js/bootstrap.js}" src="../static/js/bootstrap.js"></script>
+	<script th:src="@{/js/jquery.js}" src="../static/js/jquery.js"></script>
+	<title>Spring Boot</title>
+	<meta charset="ISO-8859-1">
+
+</head>
+	<body>
+		<!-- menu -->
+		<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#">SpringBoot</a>
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+					aria-controls="navbarNavAltMarkup" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<a class="nav-link active" aria-current="page" href="#">Inicio</a> 
+						<a class="nav-link" href="#">Galeria</a> 
+						<a class="nav-link" href="#">Post</a>
+						<a class="nav-link disabled" href="#" tabindex="-1"
+							aria-disabled="true">Disabled</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+	 	
+	 	
+	 	<br>
+	 	<div class="container">
+	 	<h1>Pagina Equipo</h1>
+	 	<div class="list-group">		
+			  <a th:href="@{/equipoc/mostrar/SportingCristal}" class="list-group-item list-group-item-action list-group-item-primary">Ver Equipo 1</a>
+			  <a th:href="@{/equipoc/mostrar/Universitario}" class="list-group-item list-group-item-action list-group-item-secondary">Ver Equipo 2 </a>	 
+		</div>
+		<br>
+	 	<br>
+	 	
+	 		<div class="form-row">
+			    <label  class="col-sm-2 col-form-label">Codigo Equipo: </label>
+			    <p th:if="${equipoFront != null}" th:text="${equipoFront.codigoEquipo}"></p>      
+		    </div>
+		    
+		    <div class="form-row">
+			    <label  class="col-sm-2 col-form-label">Nombre:</label>
+			    <p th:if="${equipoFront != null}" th:text="${equipoFront.nombreEquipo}"></p>      
+		    </div>
+		    
+		    <div class="form-row">
+			    <label  class="col-sm-2 col-form-label">Numero de titulos nacionales:</label>
+			    <p th:if="${equipoFront != null}" th:text="${equipoFront.cantidadTituloNacional}"></p>      
+		    </div>
+		    
+		    <div class="form-row">
+			    <label  class="col-sm-2 col-form-label">Dueño actual:</label>
+			    <p th:if="${equipoFront != null}" th:text="${equipoFront.duenioActual}"></p>      
+		    </div>
+		    
+		    <div class="form-row">
+			    <label  class="col-sm-2 col-form-label">Cantidad de titulos internacionales:</label>
+			    <p th:if="${equipoFront != null}" th:text="${equipoFront.cantidadTituloInternacional}"></p>      
+		    </div>
+		    
+		    <div class="form-row">
+			    <label  class="col-sm-2 col-form-label">Patrocinador Principal:</label>
+			    <p th:if="${equipoFront != null}" th:text="${equipoFront.patrocinadorPrincipal}"></p>      
+		    </div>
+		    
+	 	
+	 	</div>
+	 	
+	</body>
+</html>

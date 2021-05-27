@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" >
+	
+    <Appenders>
+    	<!-- Configuracion del log para la consola del editor (Para nuestro caso eclipse) -->
+        <Console name="log-consola" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console> 
+    </Appenders>
+    
+    <Loggers>
+		<!-- Niveles DEBUG,INFO,WARN,ERROR,FATAL -->
+
+        <Logger name="com.rios" level="DEBUG" additivity="false">
+        	 <AppenderRef ref="log-consola"/>
+        </Logger>
+        
+        <!-- LOG DE SPRING -->
+         <Logger name="org.springframework.boot" level="error" additivity="false">
+            <AppenderRef ref="log-consola"/>
+        </Logger>
+    	
+        <Root level="INFO">
+			<AppenderRef ref="log-consola" />
+        </Root>
+        
+        
+     
+        <!--  - Produccion -->
+        
+<!--         <Logger name="com.api" level="WARN" additivity="false">-->
+    	
+<!--         <Root level="WARN"> -->
+<!-- 			<AppenderRef ref="log-consola" /> -->
+<!--         </Root> -->
+
+
+
+        
+    </Loggers>
+</Configuration>
