@@ -75,7 +75,7 @@ public class UsuarioController {
 			log.info("fallo inserccion ");
 		}
 		
-		modelAndView.addObject("usuarioLogin", this.loginUsuario(usuario, model));
+		modelAndView.addObject("usuario", this.loginUsuario(usuario, model));
 				
 		return modelAndView;
 	}
