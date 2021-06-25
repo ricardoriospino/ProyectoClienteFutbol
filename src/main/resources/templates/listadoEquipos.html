@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="index :: head">
+	
+	<title>Listado Equipos</title>
+	<meta charset="utf-8">
+
+</head>
+<body class="animsition">
+	<div class="page-wrapper">		
+		<!-- MENU SIDEBAR-->
+		
+		 <div th:replace="dataTable :: dataTable" > </div>
+		 
+	     <aside th:replace="index :: aside" ></aside>
+	 	
+	 	 <div class="page-container">
+	 	 	 <header th:replace="index :: header"></header>
+	 	 </div>
+	 	
+	 	<br>
+	 	<div class="main-content">
+                <div class="section__content section__content--p30">
+                
+                    <div class="container-fluid">
+                    	<div class="row justify-content-end" >
+                            <div class="col-lg-9" >
+			           			<h3 class="text-center ">Listado de Equipos </h3>
+			                    <hr>
+			                    
+			                    <div id=botonAgregar class="container text-left text-left">
+				                    	<a href="#" class="au-btn au-btn-icon au-btn--blue">Agregar Nuevo Equipo</a>
+				                </div>
+				                <br>
+			                    
+			                    <div class="table-responsive table--no-card m-b-30">
+
+				                    <table id="tblEquipo" class="table table-borderless table-striped table-earning"  cellspacing="0" width="100%">
+				                    	<thead>
+											<tr>
+												<th scope="col">ID </th>
+												<th scope="col">CODIGO EQUIPO</th>
+												<th scope="col">NOMBRE</th>
+												<th scope="col">AÑO FUNDACION</th>
+												<th scope="col">TITULOS NACIONALES</th>
+												<th scope="col">TITULOS INTERNACIONALES</th>
+												<th scope="col">PATROCINADOR</th>
+												<th scope="col">EDITAR/ELIMINAR</th>
+											</tr>
+										</thead>
+										<tbody th:each="equipo : ${equipos}">
+											<tr>
+												<td th:text="${equipo.idEquipo}" scope="row"></td>
+												<td th:text="${equipo.codigoEquipo}"></td>
+												<td th:text="${equipo.nombreEquipo}"></td>
+												<td th:text="${equipo.anioFundacion}"></td>
+												<td th:text="${equipo.cantidadTituloNacional}"></td>
+												<td th:text="${equipo.cantidadTituloInternacional}"></td>
+												<td th:text="${equipo.patrocinadorPrincipal}"></td>
+												<td><a  href="#">Editar</a>
+												&nbsp;&nbsp;&nbsp;<a href="#">Eliminar</a></td>
+											</tr>
+										</tbody>
+				                    </table>
+				                 </div>
+                    		</div>
+                    	</div>
+                    </div>
+                    
+                    <script type="text/javascript">
+						//Basic example
+						$(document).ready(function() {
+							$('#tblEquipo').DataTable({
+								"paging" : true // activar o desactivar paginacion 			
+							});
+						});
+					</script>   
+                </div>
+            </div>	 	
+	</div> 	
+	
+	<div th:replace="importJs :: importJs"></div>
+   
+</body>
+</html>

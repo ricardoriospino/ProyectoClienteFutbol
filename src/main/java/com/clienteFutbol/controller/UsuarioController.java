@@ -27,6 +27,20 @@ import com.clienteFutbol.rest.cliente.util.RestUtilitario;
 public class UsuarioController {
 	private static final Logger log = LogManager.getLogger(UsuarioController.class);
 	
+	//http://localhost:9090/usuarioController/login
+		@GetMapping(value="/login")
+		public ModelAndView loginUsuario (Model model ) {
+			log.info("inicio de loginUsuario ");
+	
+			
+			ModelAndView modelAndView = new ModelAndView(Paginas.PAGINALOGIN);
+			modelAndView.addObject("usuarioLogin" , new UsuarioDTO());
+			modelAndView.addObject("fallo", false);
+			return modelAndView;
+		}
+		
+		//------------------------------------------------------------
+	
 	//http://localhost:9090/usuarioController/register
 	@GetMapping(value="/register")
 	public ModelAndView registerUsuario (Model model ) {
@@ -38,8 +52,20 @@ public class UsuarioController {
 		return modelAndView;
 	}
 	
-	//------------------------------------------------------------
+	//--------------------------------------------------------------------
 	
+	//http://localhost:9090/usuarioController/mostrarRegistre
+	@GetMapping(value="/mostrarRegistre")
+	public ModelAndView mostrarRegistre (Model model ) {
+		log.info("inicio de mostrarRegistre ");
+		
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAREGISTER);
+		modelAndView.addObject("usuario" , new UsuarioDTO());
+		return modelAndView;
+	
+	}
+	
+	//------------------------------------------------------------------
 	
 	//http://loalhost:9090/usuarioController/saveUsuario
 	@PostMapping(value ="/saveUsuario")
@@ -53,8 +79,7 @@ public class UsuarioController {
 		
 		String endPoint ="http://localhost:8090/apiFutbol/usuario";
 		String token = GestorTokenSeguridad.obtenerToken();
-		
-		RestTemplate restCliente = new RestTemplate();
+			
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", token);
 		HttpEntity request = new HttpEntity<>(usuario,headers);
@@ -73,6 +98,7 @@ public class UsuarioController {
 			
 		}else {
 			log.info("fallo inserccion ");
+			modelAndView = new ModelAndView(Paginas.PAGINAREGISTER);
 		}
 		
 		modelAndView.addObject("usuario", this.loginUsuario(usuario, model));
@@ -108,6 +134,10 @@ public class UsuarioController {
 			log.info("Usuario Valido");
 		}else {
 			log.info("Usuario invalido");
+			
+			modelAndView = new ModelAndView(Paginas.PAGINALOGIN);
+			modelAndView.addObject("fallo", true);
+			modelAndView.addObject("usuarioLogin" , new UsuarioDTO());
 		}
 		
 		return modelAndView;

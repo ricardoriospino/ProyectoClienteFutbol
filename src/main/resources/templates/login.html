@@ -48,6 +48,10 @@
                             </a>
                         </div>
                         <div class="login-form">
+                        	<div th:if="${fallo}" class="alert alert-danger" role="alert">
+								  Usuario o clave Invalida!!!
+							</div>
+							
                             <form action="" th:action="@{/usuarioController/loginUsuario}" method="post" th:object=${usuarioLogin} autocomplete="off" novalidate >
                                 <div class="form-group">
                                     <label>Usuario</label>
@@ -75,7 +79,8 @@
                             <div class="register-link">
                                 <p>
                                     No tienes cuenta?
-                                    <a href="register.html">Registrate Aqui</a>
+                                    
+                                    <a th:href="@{/usuarioController/mostrarRegistre}">Registrate Aqui</a>
                                 </p>
                             </div>
                         </div>

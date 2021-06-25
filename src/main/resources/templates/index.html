@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head th:fragment="head">
     <!-- Required meta tags-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -40,7 +40,7 @@
         
 
         <!-- MENU SIDEBAR-->
-        <aside class="menu-sidebar d-none d-lg-block">
+        <aside th:fragment="aside" class="menu-sidebar d-none d-lg-block">
             <div class="logo">
                 <a href="#">
                     <img src="images/icon/logo.png" alt="Cool Admin" />
@@ -49,29 +49,37 @@
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="active has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                    
+                        <li >
+                            <a  th:href="@{/equipoc/listaEquipo}">
+                                <i class="fas fa-tachometer-alt"></i>Equipo</a>
+                        </li>
+                        
+                        <li >
+                            <a th:href="@{/entrenador/listaEntrenadores}">
+                                <i class="fas fa-chart-bar"></i>Entrenador</a>
+                        </li>
+                        
+                        
+                        <li>
+                            <a  th:href="@{/jugador/listaJugadores}">
+                                <i class="fas fa-table"></i>Jugador</a>
                         </li>
                         <li>
-                            <a href="chart.html">
-                                <i class="fas fa-chart-bar"></i>Charts</a>
-                        </li>
-                        <li>
-                            <a href="table.html">
-                                <i class="fas fa-table"></i>Tables</a>
-                        </li>
-                        <li>
-                            <a href="form.html">
-                                <i class="far fa-check-square"></i>Forms</a>
+                            <a th:href="@{/estadio/listaEstadios}">
+                                <i class="far fa-check-square"></i>Estadio</a>
                         </li>
                         <li>
                             <a href="calendar.html">
-                                <i class="fas fa-calendar-alt"></i>Calendar</a>
+                                <i class="fas fa-calendar-alt"></i>Partido</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/titulo/listaTitulos}">
+                                <i class="fas fa-map-marker-alt"></i>Titulo</a>
                         </li>
                         <li>
                             <a href="map.html">
-                                <i class="fas fa-map-marker-alt"></i>Maps</a>
+                                <i class="fas fa-map-marker-alt"></i>Posiciones</a>
                         </li>
    
                         </li>
@@ -84,7 +92,7 @@
         <!-- PAGE CONTAINER-->
         <div class="page-container">
             <!-- HEADER DESKTOP-->
-            <header class="header-desktop">
+            <header th:fragment="header" class="header-desktop">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         <div class="header-wrap">
@@ -231,7 +239,7 @@
             <!-- HEADER DESKTOP-->
 
             <!-- MAIN CONTENT-->
-            <div class="main-content">
+            <div th:fragment="main" class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
 
