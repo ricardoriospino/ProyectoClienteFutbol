@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,8 +57,23 @@ public class EquipoController {
 	
 		return modelAndView ;
 	}
-		
 	
+	// ---------------------------------------------------------------------
+	
+	//http://localhost:9090/equipoc/agregarEquipo
+	@GetMapping(value="/agregarEquipo")
+	public ModelAndView agregarEquipo (Model model ) {
+		log.info("inicio agregarEquipo ");
+	
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOQUIPO);	
+		modelAndView.addObject("equipoSave" , new EquipoDTO());
+		modelAndView.addObject("fallo", false);
+		modelAndView.addObject("exito", false);
+		return modelAndView ;
+	}
+	
+	
+
 	// ------------------------------------------------------------------
 	
 	private List<EquipoDTO> obtenerEquipos(){
@@ -116,11 +132,48 @@ public class EquipoController {
 		
 		return modelAndView;
 	}
+	//---------------------Guardar Equipo --------------------------------------------
+	//http://localhost:9090/equipoc/saveEquipo
+	@PostMapping(value ="/saveEquipo")
+	public ModelAndView guardarEquipo(EquipoDTO equipo, Model model) {
+		log.debug("ini: guardarEquipo modelAndView");
+		
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOQUIPO);
 	
+		String endPoint ="http://localhost:8090/apiFutbol/equipo";
+		String token = GestorTokenSeguridad.obtenerToken();
+			
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);
+		HttpEntity request = new HttpEntity<>(equipo,headers);
+		
+		ResponseEntity<?> respuesta = null;
+		RestUtilitario resUtil = new RestUtilitario();
+		
+		respuesta = resUtil.consumeRestServicePUT(
+				endPoint, 
+				request, 
+				ResponseEntity.class);
+		
+		if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
+			log.info("inserto correctamente");
+			modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOQUIPO);
+			modelAndView.addObject("exito", true);
+			modelAndView.addObject("equipoSave" , new EquipoDTO());
+			
+		}else {
+			log.info("fallo inserccion ");
+			modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOQUIPO);
+			modelAndView.addObject("fallo", true);
+			modelAndView.addObject("equipoSave" , new EquipoDTO());
+		}
+		
+		return modelAndView;
+		
+	}
+	
+
 	// --------------------- lista de equipos ------------------------------------------
-	
-	
-	
 	
 	private EquipoDTO invocarServicioPorNombreEquipo(String nombreEquipo) {
 		

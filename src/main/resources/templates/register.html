@@ -50,7 +50,17 @@
                             </a>
                         </div>
                         <div class="login-form">
-                            <form class="needs-validation" th:action="@{/usuarioController/saveUsuario}" method="post" th:object=${usuario} autocomplete="off"novalidate>
+                        
+                        	<div th:if="${fallo}" class="alert alert-danger" role="alert">
+								  Ya existe Usuario!!!
+							</div>
+							
+							<div th:if="${exito}" class="alert alert-success" role="alert">
+								 Se guardo Correctamente!!
+							</div>
+									
+                        
+                            <form class="needs-validation" th:action="@{/usuarioController/saveUsuario}" method="post" th:object=${usuarioSave} autocomplete="off"novalidate>
                                 <div class="form-group">
                                     <label>Nombre</label>
                                     <input th:field="*{nombre}" th:value="*{nombre}" class="au-input au-input--full" type="text" 

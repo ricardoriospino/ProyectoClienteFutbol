@@ -12,11 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.clienteFutbol.bean.EntrenadorDTO;
+import com.clienteFutbol.bean.EquipoDTO;
 import com.clienteFutbol.bean.TituloDTO;
 import com.clienteFutbol.rest.cliente.security.GestorTokenSeguridad;
 import com.clienteFutbol.rest.cliente.util.Paginas;
@@ -41,6 +43,64 @@ public class TituloController {
 	}
 	//------------------------------------------------------
 	
+	//http://localhost:9090/titulo/agregarTitulo
+	@GetMapping(value="/agregarTitulo")
+	public ModelAndView agregarTitulo (Model model ) {
+		log.info("inicio agregarTitulo ");
+		
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);	
+		modelAndView.addObject("tituloSave" , new TituloDTO());
+		modelAndView.addObject("fallo", false);
+		modelAndView.addObject("exito", false);
+		return modelAndView ;
+	}
+	
+	//---------------------Guardar Titulo --------------------------------------------
+	//http://localhost:9090/titulo/saveTitulo
+	@PostMapping(value ="/saveTitulo")
+	public ModelAndView guardarTitulo(TituloDTO titulo, Model model) {
+		log.debug("ini: guardarTitulo modelAndView");
+		
+		titulo.setNacional(true);
+		
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);
+		modelAndView.addObject("tituloSave" , new TituloDTO());
+		
+		String endPoint ="http://localhost:8090/apiFutbol/titulo";
+		String token = GestorTokenSeguridad.obtenerToken();
+			
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);
+		HttpEntity request = new HttpEntity<>(titulo,headers);
+		
+		ResponseEntity<?> respuesta = null;
+		RestUtilitario resUtil = new RestUtilitario();
+		
+		respuesta = resUtil.consumeRestServicePUT(
+				endPoint, 
+				request, 
+				ResponseEntity.class);
+		
+		if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
+			
+			log.info("inserto correctamente");
+			modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);
+			modelAndView.addObject("exito", true);
+			modelAndView.addObject("tituloSave" , new TituloDTO());
+			
+		}else {
+			
+			log.info("fallo inserccion ");
+			modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);
+			modelAndView.addObject("fallo", true);
+			modelAndView.addObject("tituloSave" , new TituloDTO());
+		}
+		
+		return modelAndView;
+		
+	}
+	
+	// -------------------Lista---------------------------------
 	private List<TituloDTO> obtenerTitulo(){
 		System.out.println("Cargando titulos");
 				

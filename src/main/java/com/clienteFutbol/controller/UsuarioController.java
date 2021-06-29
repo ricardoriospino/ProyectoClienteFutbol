@@ -47,24 +47,13 @@ public class UsuarioController {
 		log.info("inicio de registerUsuario ");
 		
 		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAREGISTER);
-		modelAndView.addObject("usuario" , new UsuarioDTO());
-		
+		modelAndView.addObject("usuarioSave" , new UsuarioDTO());
+		modelAndView.addObject("fallo", false);
+		modelAndView.addObject("exito", false);
 		return modelAndView;
 	}
 	
-	//--------------------------------------------------------------------
-	
-	//http://localhost:9090/usuarioController/mostrarRegistre
-	@GetMapping(value="/mostrarRegistre")
-	public ModelAndView mostrarRegistre (Model model ) {
-		log.info("inicio de mostrarRegistre ");
-		
-		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAREGISTER);
-		modelAndView.addObject("usuario" , new UsuarioDTO());
-		return modelAndView;
-	
-	}
-	
+
 	//------------------------------------------------------------------
 	
 	//http://loalhost:9090/usuarioController/saveUsuario
@@ -72,9 +61,9 @@ public class UsuarioController {
 	public ModelAndView guardarUsuario(UsuarioDTO usuario , Model model) {
 		log.debug("ini: guardarUsuario modelAndView");
 		
-		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINALOGIN);
-		modelAndView.addObject("usuarioLogin" , new UsuarioDTO());
-					
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAREGISTER);
+		
+		
 		usuario.setEnable(true);
 		
 		String endPoint ="http://localhost:8090/apiFutbol/usuario";
@@ -95,16 +84,21 @@ public class UsuarioController {
 		
 		if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
 			log.info("inserto correctamente");
-			
+			modelAndView = new ModelAndView(Paginas.PAGINAREGISTER);
+			modelAndView.addObject("exito", true);
+			modelAndView.addObject("usuarioSave" , new UsuarioDTO());
 		}else {
 			log.info("fallo inserccion ");
 			modelAndView = new ModelAndView(Paginas.PAGINAREGISTER);
+			modelAndView.addObject("fallo", true);
+			modelAndView.addObject("usuarioSave" , new UsuarioDTO());
 		}
 		
-		modelAndView.addObject("usuario", this.loginUsuario(usuario, model));
-				
+		
 		return modelAndView;
 	}
+	
+	// -------------------------------------------------------------------
 	
 	//http://localhost:9090/equipoController/loginUsuario
 	@PostMapping("/loginUsuario")
