@@ -16,146 +16,162 @@
 	 	
 	 	 <div class="page-container">
 	 	 	 <header th:replace="index :: header"></header>
-	 	 </div>
+	 	 
 	 	
-	 	<br>
-	 	<!-- MAIN CONTENT-->
-            <div class="main-content">
-                <div class="section__content section__content--p30">
-                    <div class="container-fluid">
-                        <div class="row justify-content-end">
-                            <div class="col-lg-9">
-                                <div class="card">
-                                    <div class="card-header">
-                                     <strong>  Agregar Equipo</strong> 
-                                     
-                                     <div th:if="${fallo}" class="alert alert-danger" role="alert">
-										  Error no guardo correctamente!!
-									</div>
-									
-									<div th:if="${exito}" class="alert alert-success" role="alert">
-										  Se guardo Correctamente!!
-									</div>
-									
-									
-                                    </div>
-                                    <div class="card-body card-block">
-                                        <form action="" th:action="@{/equipoc/saveEquipo}" method="post" th:object=${equipoSave} enctype="multipart/form-data" class="form-horizontal">
-
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label for="text-input" class=" form-control-label">Nombre Equipo</label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <input th:field="*{nombreEquipo}" th:value="*{nombreEquipo}" type="text" id="text-input" name="text-input" 
-                                                    placeholder="Nombre Equipo" class="form-control" required>
-                                                    <small class="form-text text-muted">Solo Equipos locales</small>
-
-                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
-											        <div class="invalid-feedback">complete el campo </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label for="text-input" class=" form-control-label">Año Fundacion</label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <input th:field="*{anioFundacion}" th:value="*{anioFundacion}"  id="datepickerFundacion" name="fecha_inicio"  class="form-control" 
-                                                    value="${fechaFundacion}" required >
-                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
-											        <div class="invalid-feedback">complete el campo </div>
-                                                    <script>
-                                                        $('#datepickerFundacion').datepicker({
-                                                            datepicker: true,
-                                                            uiLibrary : 'bootstrap4',
-                                                            locale: 'es-es',
-                                                            format:'yyyy-mm-dd'
-                                                        });
-                                                    </script>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label  class=" form-control-label">Imagen Escudo</label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <input th:field="*{imagenEscudo}" th:value="*{imagenEscudo}"  type="text"   placeholder="URL Imagen" class="form-control" required>
-                                                    <small class="help-block form-text">Ingresar URL </small>
-                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
-											        <div class="invalid-feedback">complete el campo </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label  class=" form-control-label">Dueño Actual</label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <input th:field="*{duenioActual}" th:value="*{duenioActual}" type="text"   placeholder="Nombres" class="form-control" required>
-                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
-											        <div class="invalid-feedback">complete el campo </div>
-                                                   
-                                                </div>
-                                            </div>
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label  class=" form-control-label"> Titulos Nacionales</label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <input th:field="*{cantidadTituloNacional}" th:value="*{cantidadTituloNacional}" type="number"   placeholder="Numero de titulos nacionales" 
-                                                    class="form-control" required>
-                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
-											        <div class="invalid-feedback">complete el campo </div>
-                                                   
-                                                </div>
-                                            </div>
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label  class=" form-control-label"> Titulos Internacionales</label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <input th:field="*{cantidadTituloInternacional}" th:value="*{cantidadTituloInternacional}" type="number"   placeholder="Numero de titulos Internacionales" 
-                                                    class="form-control" required>
-                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
-											        <div class="invalid-feedback">complete el campo </div>
-                                                   
-                                                </div>
-                                            </div>
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label  class=" form-control-label"> Patrocinador Oficial</label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <input th:field="*{patrocinadorPrincipal}" th:value="*{patrocinadorPrincipal}" type="text"  class="form-control" required>
-                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
-											        <div class="invalid-feedback">complete el campo </div>
-                                                   
-                                                </div>
-                                            </div>
-                                            <div class="card-footer text-center" >
-		                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-dot-circle-o"></i> Enviar</button>
-		                                        <button type="reset" class="btn btn-danger btn-sm"><i class="fa fa-ban"></i> Cancelar</button>
-                                   		    </div>
-                                        </form>
-                                        
-                                    </div>
-                                    
-                                </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="copyright">
-                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> 	
-	</div> 	
+		 	<br>
+		 	<!-- MAIN CONTENT-->
+	            <div class="main-content">
+	                <div class="section__content section__content--p30">
+	                    <div class="container-fluid">
+	                        <div class="row">
+	                            <div class="col-lg-12">
+	                                <div class="card">
+	                                    <div class="card-header">
+	                                     <strong>  Agregar Equipo</strong> 
+	                                     
+	                                     <div th:if="${fallo}" class="alert alert-danger" role="alert">
+											 <p th:text="${mensajeFalloGuardar}"></p> 
+										</div>
+										
+										<div th:if="${exito}" class="alert alert-success" role="alert">
+											  <p th:text="${mensajeExitoGuardar}"></p> 
+										</div>
+										
+										<div th:if="${exitoActualizar}" class="alert alert-success" role="alert">
+											 <p th:text="${mensajeExitoActualizar}"></p> 
+										</div>
+										
+										<div th:if="${existe}" class="alert alert-danger" role="alert">
+											 <p th:text="${mensajeExiste}"></p> 
+										</div>
+										
+										<div th:if="${falloActualizar}" class="alert alert-danger" role="alert">
+											  <p th:text="${mensajeFalloActualizar}"></p> 
+										</div>
+										
+	                                    </div>
+	                                    <div class="card-body card-block">
+	                                        <form action="" th:action="@{/equipoc/saveEquipo}" method="post" th:object=${equipoSave} enctype="multipart/form-data" class="form-horizontal">
+												
+												<input type="hidden" th:field="*{idEquipo}" th:value="${idEquipo}"  />
+												<input type="hidden" th:field="*{codigoEquipo}" th:value="${codigoEquipo}"  />
+												
+	                                            <div class="row form-group">
+	                                                <div class="col col-md-3">
+	                                                    <label for="text-input" class=" form-control-label">Nombre Equipo</label>
+	                                                </div>
+	                                                <div class="col-12 col-md-9">
+	                                                    <input th:field="*{nombreEquipo}" th:value="*{nombreEquipo}" type="text" id="text-input" name="text-input" 
+	                                                    placeholder="Nombre Equipo" class="form-control" required>
+	                                                    <small class="form-text text-muted">Solo Equipos locales</small>
+	
+	                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
+												        <div class="invalid-feedback">complete el campo </div>
+	                                                </div>
+	                                            </div>
+	
+	                                            <div class="row form-group">
+	                                                <div class="col col-md-3">
+	                                                    <label for="text-input" class=" form-control-label">Año Fundacion</label>
+	                                                </div>
+	                                                <div class="col-12 col-md-9">
+	                                                    <input th:field="*{anioFundacion}" th:value="*{anioFundacion}"  id="datepickerFundacion" name="fecha_inicio"  class="form-control" 
+	                                                    value="${fechaFundacion}" required >
+	                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
+												        <div class="invalid-feedback">complete el campo </div>
+	                                                    <script>
+	                                                        $('#datepickerFundacion').datepicker({
+	                                                            datepicker: true,
+	                                                            uiLibrary : 'bootstrap4',
+	                                                            locale: 'es-es',
+	                                                            format:'yyyy-mm-dd'
+	                                                        });
+	                                                    </script>
+	                                                </div>
+	                                            </div>
+	
+	
+	                                            <div class="row form-group">
+	                                                <div class="col col-md-3">
+	                                                    <label  class=" form-control-label">Imagen Escudo</label>
+	                                                </div>
+	                                                <div class="col-12 col-md-9">
+	                                                    <input th:field="*{imagenEscudo}" th:value="*{imagenEscudo}"  type="text"   placeholder="URL Imagen" class="form-control" required>
+	                                                    <small class="help-block form-text">Ingresar URL </small>
+	                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
+												        <div class="invalid-feedback">complete el campo </div>
+	                                                </div>
+	                                            </div>
+	
+	                                            <div class="row form-group">
+	                                                <div class="col col-md-3">
+	                                                    <label  class=" form-control-label">Dueño Actual</label>
+	                                                </div>
+	                                                <div class="col-12 col-md-9">
+	                                                    <input th:field="*{duenioActual}" th:value="*{duenioActual}" type="text"   placeholder="Nombres" class="form-control" required>
+	                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
+												        <div class="invalid-feedback">complete el campo </div>
+	                                                   
+	                                                </div>
+	                                            </div>
+	                                            <div class="row form-group">
+	                                                <div class="col col-md-3">
+	                                                    <label  class=" form-control-label"> Titulos Nacionales</label>
+	                                                </div>
+	                                                <div class="col-12 col-md-9">
+	                                                    <input th:field="*{cantidadTituloNacional}" th:value="*{cantidadTituloNacional}" type="number"   placeholder="Numero de titulos nacionales" 
+	                                                    class="form-control" required>
+	                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
+												        <div class="invalid-feedback">complete el campo </div>
+	                                                   
+	                                                </div>
+	                                            </div>
+	                                            <div class="row form-group">
+	                                                <div class="col col-md-3">
+	                                                    <label  class=" form-control-label"> Titulos Internacionales</label>
+	                                                </div>
+	                                                <div class="col-12 col-md-9">
+	                                                    <input th:field="*{cantidadTituloInternacional}" th:value="*{cantidadTituloInternacional}" type="number"   placeholder="Numero de titulos Internacionales" 
+	                                                    class="form-control" required>
+	                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
+												        <div class="invalid-feedback">complete el campo </div>
+	                                                   
+	                                                </div>
+	                                            </div>
+	                                            <div class="row form-group">
+	                                                <div class="col col-md-3">
+	                                                    <label  class=" form-control-label"> Patrocinador Oficial</label>
+	                                                </div>
+	                                                <div class="col-12 col-md-9">
+	                                                    <input th:field="*{patrocinadorPrincipal}" th:value="*{patrocinadorPrincipal}" type="text"  class="form-control" required>
+	                                                    <div class="valid-feedback">Dato ingresado correctamente</div>
+												        <div class="invalid-feedback">complete el campo </div>
+	                                                   
+	                                                </div>
+	                                            </div>
+	                                            <div class="card-footer text-center" >
+			                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-dot-circle-o"></i> Guardar</button>
+			                                        <button type="reset" class="btn btn-danger btn-sm"><i class="fa fa-ban"></i> Cancelar</button>
+			                                        <a th:href="@{/equipoc/listaEquipo}" class="btn btn-primary offset-md-2"><i class="fa fa-undo"></i></a>
+	                                   		    </div>
+	                                        </form>
+	                                        
+	                                    </div>
+	                                    
+	                                </div>
+	                        <div class="row">
+	                            <div class="col-md-12">
+	                                <div class="copyright">
+	                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div> 	
+		</div> 	
+	</div>
 	
 	<div th:replace="importJs :: importJs"></div>
    

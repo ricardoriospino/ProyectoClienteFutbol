@@ -52,11 +52,15 @@
                         <div class="login-form">
                         
                         	<div th:if="${fallo}" class="alert alert-danger" role="alert">
-								  Ya existe Usuario!!!
+								  <p th:text="${mensajeFallo}"></p> 
+							</div>
+							
+							<div th:if="${existe}" class="alert alert-danger" role="alert">
+								  <p th:text="${mensajeExiste}"></p> 
 							</div>
 							
 							<div th:if="${exito}" class="alert alert-success" role="alert">
-								 Se guardo Correctamente!!
+								 <p th:text="${mensajeExito}"></p> 
 							</div>
 									
                         

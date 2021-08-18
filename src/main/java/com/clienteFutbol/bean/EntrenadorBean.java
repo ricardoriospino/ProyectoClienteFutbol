@@ -1,8 +1,7 @@
 package com.clienteFutbol.bean;
 
-import java.io.Serializable;
 
-public class EntrenadorBean implements Serializable {
+public class EntrenadorBean  {
 	
 	private int idEntrenador;
 	private String codigoEntrenador;

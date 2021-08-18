@@ -58,5 +58,24 @@ public class RestUtilitario {
 		            
 	    }
 	}
+	
+	public <T> ResponseEntity consumeRestServiceDELETE(String endPoint,HttpEntity request, Class<T> responseType) {  
+	    try {
+	    	RestTemplate restCliente = new RestTemplate();
+	        return restCliente.exchange(endPoint,HttpMethod.DELETE,request, responseType);
+	    } catch (RestClientResponseException e) {
+	        return ResponseEntity
+	            .status(e.getRawStatusCode())
+	            .body(e.getResponseBodyAsString());
+	    }
+	    
+	    catch(Exception e) {
+	    	return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+		            
+	    }
+	}
+	
+	
+	
 
 }

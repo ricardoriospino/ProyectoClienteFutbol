@@ -13,54 +13,67 @@
 		 <div th:replace="dataTable :: dataTable" > </div>
 		 
 	     <aside th:replace="index :: aside" ></aside>
-	 	
+
 	 	 <div class="page-container">
 	 	 	 <header th:replace="index :: header"></header>
-	 	 </div>
-	 	
-	 	<br>
-	 	<div class="main-content">
+	 	 
+	 	 	 
+	 	 	 <div class="main-content">
                 <div class="section__content section__content--p30">
                 
                     <div class="container-fluid">
-                    	<div class="row justify-content-end" >
-                            <div class="col-lg-9" >
-			           			<h3 class="text-center ">Listado de Entrenadores </h3>
-			                    <hr>
+                    	<div class="row">
+                            <div class="col-lg-12" >
+                            	<div class="card">
+				           			<h3 class="text-center ">Listado de Entrenadores </h3>
+				                    <hr>
 			                    
-			                    <div id=botonAgregar class="container text-left text-left">
-				                    	<a th:href="@{/entrenador/agregarEntrenador}" class="au-btn au-btn-icon au-btn--blue">Agregar Nuevo Entrenador</a>
-				                </div>
-				                <br>
-			                    
-			                    <div class="table-responsive table--no-card m-b-30">
-
-				                    <table id="tblEntrenador" class="table table-borderless table-striped table-earning"  cellspacing="0" width="100%">
-				                    	<thead>
-											<tr>
-												<th scope="col">ID </th>
-												<th scope="col">CODIGO ENTRENADOR</th>
-												<th scope="col">NOMBRE</th>	
-												<th scope="col">NACIONALIDAD</th>
-												<th scope="col">INICIO LABORAL</th>
-												<th scope="col">TITULOS</th>
-												<th scope="col">EDITAR/ELIMINAR</th>
-											</tr>
-										</thead>
-										<tbody th:each="entrenador : ${entrenadores}">
-											<tr>
-												<td th:text="${entrenador.idEntrenador}" scope="row"></td>
-												<td th:text="${entrenador.codigoEntrenador}"></td>
-												<td th:text="${entrenador.nombreEntrenador}"></td>
-												<td th:text="${entrenador.nacionalidad}"></td>
-												<td th:text="${entrenador.aniosInicioLaboral}"></td>
-												<td th:text="${entrenador.titulosGanados}"></td>
-												<td><a  href="#">Editar</a>
-												&nbsp;&nbsp;&nbsp;<a href="#">Eliminar</a></td>
-											</tr>
-										</tbody>
-				                    </table>
-				                 </div>
+				                    <div id=botonAgregar class="container text-left text-left">
+					                    	<a th:href="@{/entrenador/agregarEntrenador}" class="au-btn au-btn-icon au-btn--blue">Agregar Nuevo Entrenador</a>
+					                </div>
+				                	<br>
+				                    
+				                    <div class="table-responsive table--no-card m-b-30">
+				                    
+					                     <div th:if="${falloEliminar}" class="alert alert-danger" role="alert">
+											   <p th:text="${mensajeFalloEliminar}"></p> 
+										 </div>
+										 
+										 <div th:if="${EntrenadorData}" class="alert alert-danger" role="alert">
+											   <p th:text="${mensajeFalloEliminarData}"></p> 
+										 </div>
+										
+										 <div th:if="${exitoEliminar}" class="alert alert-success" role="alert">
+												  <p th:text="${mensajeExitoEliminar}"></p> 
+										 </div>
+	
+					                    <table id="tblEntrenador" class="table table-borderless table-striped table-earning"  cellspacing="0" width="100%">
+					                    	<thead>
+												<tr>
+													<th scope="col">ID </th>
+													<th scope="col">CODIGO ENTRENADOR</th>
+													<th scope="col">NOMBRE</th>	
+													<th scope="col">NACIONALIDAD</th>
+													<th scope="col">INICIO LABORAL</th>
+													<th scope="col">TITULOS</th>
+													<th scope="col">EDITAR/ELIMINAR</th>
+												</tr>
+											</thead>
+											<tbody th:each="entrenador : ${entrenadores}">
+												<tr>
+													<td th:text="${entrenador.idEntrenador}" scope="row"></td>
+													<td th:text="${entrenador.codigoEntrenador}"></td>
+													<td th:text="${entrenador.nombreEntrenador}"></td>
+													<td th:text="${entrenador.nacionalidad}"></td>
+													<td th:text="${entrenador.aniosInicioLaboral}"></td>
+													<td th:text="${entrenador.titulosGanados}"></td>
+													<td><a  th:href="@{/entrenador/actualizarEntrenador/} + ${entrenador.idEntrenador}">Editar</a>
+													&nbsp;&nbsp;&nbsp;<a th:href="@{/entrenador/eliminarEntrenador/} + ${entrenador.idEntrenador}">Eliminar</a></td>
+												</tr>
+											</tbody>
+					                    </table>
+					                 </div>
+					              </div>
                     		</div>
                     	</div>
                     </div>
@@ -74,7 +87,8 @@
 						});
 					</script>   
                 </div>
-            </div>	 	
+            </div> 
+	 	 </div>	 	
 	</div> 	
 	
 	<div th:replace="importJs :: importJs"></div>

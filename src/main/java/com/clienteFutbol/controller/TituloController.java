@@ -12,12 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.clienteFutbol.bean.EntrenadorDTO;
 import com.clienteFutbol.bean.EquipoDTO;
 import com.clienteFutbol.bean.TituloDTO;
 import com.clienteFutbol.rest.cliente.security.GestorTokenSeguridad;
@@ -35,10 +35,8 @@ public class TituloController {
 	public ModelAndView listaEntrenador (Model model ) {
 		log.info("inicio listaEntrenador ");
 								
-		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINALISTATITULOS);	
-				
-		modelAndView.addObject("titulos",this.obtenerTitulo());
-			
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINALISTATITULOS);					
+		modelAndView.addObject("titulos",this.obtenerTitulo());			
 		return modelAndView ;
 	}
 	//------------------------------------------------------
@@ -49,11 +47,25 @@ public class TituloController {
 		log.info("inicio agregarTitulo ");
 		
 		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);	
-		modelAndView.addObject("tituloSave" , new TituloDTO());
-		modelAndView.addObject("fallo", false);
-		modelAndView.addObject("exito", false);
+		modelAndView.addObject("tituloSave" , new TituloDTO());	
+		modelAndView.addObject("equipos",this.obtenerEquipos());
 		return modelAndView ;
 	}
+	
+	//http://localhost:9090/titulo/actualizarTitulo/
+	@GetMapping(value="/actualizarTitulo/{idTitulo}")
+	public ModelAndView actualizarTitulo (@PathVariable(name="idTitulo", required = true) int idTitulo,TituloDTO titulo,Model model ) {
+			
+		log.info("inicio actualizarTitulo ");
+			
+		titulo = this.obtenerTitulo(idTitulo);
+					
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);	
+		modelAndView.addObject("tituloSave" ,  titulo);
+		modelAndView.addObject("equipos",this.obtenerEquipos());
+			
+		return modelAndView ;
+		}
 	
 	//---------------------Guardar Titulo --------------------------------------------
 	//http://localhost:9090/titulo/saveTitulo
@@ -61,68 +73,163 @@ public class TituloController {
 	public ModelAndView guardarTitulo(TituloDTO titulo, Model model) {
 		log.debug("ini: guardarTitulo modelAndView");
 		
-		titulo.setNacional(true);
-		
+		titulo.setNacional(true);		
 		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);
-		modelAndView.addObject("tituloSave" , new TituloDTO());
-		
+		log.info("Id titulo : " + titulo.getIdTitulo());		
+
 		String endPoint ="http://localhost:8090/apiFutbol/titulo";
 		String token = GestorTokenSeguridad.obtenerToken();
-			
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", token);
 		HttpEntity request = new HttpEntity<>(titulo,headers);
-		
 		ResponseEntity<?> respuesta = null;
 		RestUtilitario resUtil = new RestUtilitario();
 		
-		respuesta = resUtil.consumeRestServicePUT(
-				endPoint, 
-				request, 
-				ResponseEntity.class);
-		
-		if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
+		if(titulo.getIdTitulo() == 0) {
 			
-			log.info("inserto correctamente");
-			modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);
-			modelAndView.addObject("exito", true);
 			modelAndView.addObject("tituloSave" , new TituloDTO());
+
+			respuesta = resUtil.consumeRestServicePUT(endPoint, request, ResponseEntity.class);
+			modelAndView = generarRespuestaInsertarActualizar(titulo, respuesta);
+						
+		}else {
+			
+			log.info("Actualizando Titulo");
+
+			try {
+				
+				respuesta = resUtil.consumeRestServicePOST(endPoint, request, ResponseEntity.class);
+				modelAndView = generarRespuestaInsertarActualizar(titulo, respuesta);
+
+			} catch (RestClientException r) {
+				r.printStackTrace();
+				log.debug("fallo al actualizar");
+			}
+			
+		}
+
+		return modelAndView;		
+	}
+	
+	// ------------------------------------------------------
+	private ModelAndView generarRespuestaInsertarActualizar (TituloDTO titulo,ResponseEntity<?> respuesta) {
+		
+		ModelAndView modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);
+				
+		if(titulo.getIdEquipo() == 0) {
+			
+			if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
+				
+				log.info("inserto correctamente");			
+				modelAndView.addObject("equipos",this.obtenerEquipos());
+				modelAndView.addObject("mensajeExitoGuardar", "Se guardo Correctamente!!" );
+				modelAndView.addObject("exito", true);
+				modelAndView.addObject("tituloSave" , new TituloDTO());
+				
+			}else {
+				
+				log.info("fallo inserccion ");			
+				modelAndView.addObject("equipos",this.obtenerEquipos());
+				modelAndView.addObject("mensajeFalloGuardar", "Error no guardo correctamente!!" );
+				modelAndView.addObject("fallo", true);
+				modelAndView.addObject("tituloSave" , titulo );
+			}
 			
 		}else {
 			
-			log.info("fallo inserccion ");
-			modelAndView = new ModelAndView(Paginas.PAGINAFORMULARIOTITULO);
-			modelAndView.addObject("fallo", true);
-			modelAndView.addObject("tituloSave" , new TituloDTO());
+			if(respuesta.getStatusCode().equals(HttpStatus.OK)) {
+				log.info("actualizacion correcta");	
+				modelAndView.addObject("equipos",this.obtenerEquipos());
+				modelAndView.addObject("mensajeExitoActualizar", "Se Actualizo Correctamente!!" );
+				modelAndView.addObject("exitoActualizar", true);
+				modelAndView.addObject("tituloSave" , new TituloDTO());
+				
+		    }else {
+		    	log.error("No se pudo actualizar");
+		    	modelAndView.addObject("equipos",this.obtenerEquipos());
+		    	modelAndView.addObject("mensajeFalloActualizar", "Error no Actualizo Correctamente!!" );
+		    	modelAndView.addObject("falloActualizar", true);
+		    	modelAndView.addObject("tituloSave" , titulo);
+		    }
+			
 		}
-		
 		return modelAndView;
-		
 	}
 	
+	// ------------------Cargar Titulo -------------------
+	private TituloDTO obtenerTitulo(int idTitulo) {
+		log.info("Cargando titulo");
+			
+		String endpoint = "http://localhost:8090/apiFutbol/idTitulo/" + idTitulo ;
+		String token =GestorTokenSeguridad.obtenerToken();
+	
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);			
+		HttpEntity requestTitulo = new HttpEntity<>(headers);		
+		ResponseEntity<TituloDTO> respuesta = null;		
+		RestUtilitario resUtil = new RestUtilitario();
+			
+		respuesta = resUtil.consumeRestServiceGET(endpoint, requestTitulo, TituloDTO.class);
+			
+		if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
+				
+			TituloDTO titulo = respuesta.getBody();
+						
+				return titulo;
+					
+		}else {
+				return new TituloDTO();
+			  }	
+		}
+	
+	// -------------------Lista Equipos ------------------------
+	private List<EquipoDTO> obtenerEquipos(){
+		log.info("Cargando equipos");
+				
+		String endpoint = "http://localhost:8090/apiFutbol/equipos";
+		String token =GestorTokenSeguridad.obtenerToken();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);				
+		HttpEntity requestEquipos = new HttpEntity<>(headers);
+		ResponseEntity<EquipoDTO[]> respuesta = null;				
+		RestUtilitario resUtil = new RestUtilitario();
+			
+		respuesta = resUtil.consumeRestServiceGET(endpoint, requestEquipos, EquipoDTO[].class);
+				
+		if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
+				
+			EquipoDTO[] equipos = respuesta.getBody();
+					
+			List<EquipoDTO> lstEquipo = new ArrayList<EquipoDTO>();
+			for(EquipoDTO equipo : equipos) {
+				lstEquipo.add(equipo);
+				}		
+				return lstEquipo;
+				
+			}else {
+				return new ArrayList<>();
+			}
+		}
+	
+
 	// -------------------Lista---------------------------------
 	private List<TituloDTO> obtenerTitulo(){
-		System.out.println("Cargando titulos");
+		log.info("Cargando titulos");
 				
 		String endpoint = "http://localhost:8090/apiFutbol/titulos";
 		String token =GestorTokenSeguridad.obtenerToken();
 
 		// Consumimos servicio Rest tipo Get
-				
-		RestTemplate restCliente = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", token);
-				
-		HttpEntity requestTitulos = new HttpEntity<>(headers);
 
-		ResponseEntity<TituloDTO[]> respuesta = null;
-				
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);			
+		HttpEntity requestTitulos = new HttpEntity<>(headers);
+		ResponseEntity<TituloDTO[]> respuesta = null;				
 		RestUtilitario resUtil = new RestUtilitario();
 			
-		respuesta = resUtil.consumeRestServiceGET(
-						endpoint, 
-						requestTitulos, 
-						TituloDTO[].class);
+		respuesta = resUtil.consumeRestServiceGET(endpoint, requestTitulos, TituloDTO[].class);
 				
 		if(respuesta.getStatusCodeValue()== HttpStatus.OK.value()) {
 				

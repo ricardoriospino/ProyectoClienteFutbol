@@ -1,8 +1,6 @@
 package com.clienteFutbol.bean;
 
-import java.io.Serializable;
-
-public class UsuarioDTO implements Serializable {
+public class UsuarioDTO {
 	
 	private int idUsuario;
 	private String nombre;
